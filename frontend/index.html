@@ -1,169 +1,86 @@
-<nav class="navbar">
-    <div class="nav-wrapper">
-        <img src="img/logo.PNG" class="brand-img" alt="">
-        <input type="text" class="search-box" placeholder="search">
-        <div class="nav-items">
-            <img src="img/home.PNG" class="icon" alt="">
-            <img src="img/messenger.PNG" class="icon" alt="">
-            <img src="img/add.PNG" class="icon" alt="">
-            <img src="img/explore.PNG" class="icon" alt="">
-            <img src="img/like.PNG" class="icon" alt="">
-            <div class="icon user-profile"></div>
-        </div>
-    </div>
-</nav>
-<section class="main">
-    <div class="wrapper">
-        <div class="left-col">
-            <div class="status-wrapper">
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
-                    <p class="username">user_name_1</p>
-                </div>
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 2.png" alt=""></div>
-                    <p class="username">user_name_2</p>
-                </div>
-                <div class="status-card">
-                    <div class="profile-pic"><img src="img/cover 3.png" alt=""></div>
-                    <p class="username">user_name_3</p>
-                </div>
-                // +5 more status card elements.
-            </div>
-        </div>
-</section>
-
-
-section class="main">
-<div class="wrapper">
-    <div class="left-col">
-        // status wrappers
-
-        <div class="post">
-            <div class="info">
-                <div class="user">
-                    <div class="profile-pic"><img src="img/cover 1.png" alt=""></div>
-                    <p class="username">modern_web_channel</p>
-                </div>
-                <img src="img/option.PNG" class="options" alt="">
-            </div>
-            <img src="img/cover 1.png" class="post-image" alt="">
-            <div class="post-content">
-                <div class="reaction-wrapper">
-                    <img src="img/like.PNG" class="icon" alt="">
-                    <img src="img/comment.PNG" class="icon" alt="">
-                    <img src="img/send.PNG" class="icon" alt="">
-                    <img src="img/save.PNG" class="save icon" alt="">
-                </div>
-                <p class="likes">1,012 likes</p>
-                <p class="description"><span>username </span> Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Pariatur tenetur veritatis placeat, molestiae impedit aut provident eum quo natus molestias?</p>
-                <p class="post-time">2 minutes ago</p>
-            </div>
-            <div class="comment-wrapper">
-                <img src="img/smile.PNG" class="icon" alt="">
-                <input type="text" class="comment-box" placeholder="Add a comment">
-                <button class="comment-btn">post</button>
-            </div>
-        </div>
-        <div class="post">
-            <div class="info">
-                <div class="user">
-                    <div class="profile-pic"><img src="img/cover 2.png" alt=""></div>
-                    <p class="username">modern_web_channel</p>
-                </div>
-                <img src="img/option.PNG" class="options" alt="">
-            </div>
-            <img src="img/cover 2.png" class="post-image" alt="">
-            <div class="post-content">
-                <div class="reaction-wrapper">
-                    <img src="img/like.PNG" class="icon" alt="">
-                    <img src="img/comment.PNG" class="icon" alt="">
-                    <img src="img/send.PNG" class="icon" alt="">
-                    <img src="img/save.PNG" class="save icon" alt="">
-                </div>
-                <p class="likes">1,012 likes</p>
-                <p class="description"><span>username </span> Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Pariatur tenetur veritatis placeat, molestiae impedit aut provident eum quo natus molestias?</p>
-                <p class="post-time">2 minutes ago</p>
-            </div>
-            <div class="comment-wrapper">
-                <img src="img/smile.PNG" class="icon" alt="">
-                <input type="text" class="comment-box" placeholder="Add a comment">
-                <button class="comment-btn">post</button>
-            </div>
-        </div>
-        // +5 more post elements
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login or Sign Up</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .container form {
+    margin-bottom: 20px;
+  }
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  input[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+  }
+  input[type="submit"]:hover {
+    background-color: #45a049;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div id="loginFormDiv">
+    <h2>Login</h2>
+    <form id="loginForm" action="#" method="post">
+      <label for="loginUsername">Username:</label>
+      <input type="text" id="loginUsername" name="loginUsername" required>
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" name="loginPassword" required>
+      <input type="submit" value="Login">
+    </form>
+    <p>Don't have an account? <a href="#" onclick="toggleForm('loginFormDiv', 'signupFormDiv')">Sign up here</a>.</p>
+  </div>
+  <div id="signupFormDiv" style="display:none;">
+    <h2>Sign Up</h2>
+    <form id="signupForm" action="#" method="post">
+      <label for="signupUsername">Username:</label>
+      <input type="text" id="signupUsername" name="signupUsername" required>
+      <label for="signupEmail">Email:</label>
+      <input type="email" id="signupEmail" name="signupEmail" required>
+      <label for="signupPassword">Password:</label>
+      <input type="password" id="signupPassword" name="signupPassword" required>
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required>
+      <input type="submit" value="Sign Up">
+    </form>
+    <p>Already have an account? <a href="#" onclick="toggleForm('signupFormDiv', 'loginFormDiv')">Log in here</a>.</p>
+  </div>
 </div>
-</section>
 
+<script>
+  function toggleForm(hideId, showId) {
+    document.getElementById(hideId).style.display = 'none';
+    document.getElementById(showId).style.display = 'block';
+  }
+</script>
 
-<section class="main">
-    <div class="wrapper">
-        // left col element
-        <div class="right-col">
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/profile-pic.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">kunaal kumar</p>
-                </div>
-                <button class="action-btn">switch</button>
-            </div>
-            <p class="suggestion-text">Suggestions for you</p>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 9.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 10.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 11.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 12.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="img/cover 13.png" alt="">
-                </div>
-                <div>
-                    <p class="username">modern_web_channel</p>
-                    <p class="sub-text">followed bu user</p>
-                </div>
-                <button class="action-btn">follow</button>
-            </div>
-        </div>
-    </div>
-</section>
+</body>
+</html>
