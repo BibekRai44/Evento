@@ -12,11 +12,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Login</title>
     <style>
+        logo{
+            margin-right: 75px;
+        }
+    </style>
+    <div class="logo">
+        <a href="/">
+            <img src="/static/logo/png/logo-no-background.png" height="40px" width="auto">
+        </a>
+    </div>
+    <br>
+    <style>
         body {
             background-color: #f8f9fa;
             padding: 50px;
         }
-
         .login-container {
             max-width: 400px;
             margin: 0 auto;
@@ -29,6 +39,7 @@
         .form-group {
             margin-bottom: 20px;
         }
+        
 
         .btn-login {
             width: 100%;
@@ -44,10 +55,8 @@
 </head>
 
 <body class="center-content"> 
-
     <div class="container">
         <div class="login-container">
-            <h1>Login Page</h1>
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
@@ -58,10 +67,9 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-login">Login</button> 
             </form>
+            <br>
             <p>Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a></p>
         </div>
     </div>
-
 </body>
-
 </html>
