@@ -23,7 +23,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="{{url_for('dashboard')}}">
                 <img src="/static/logo/png/logo-no-background.png" height="40px" width="auto">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +32,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item mr-3">
-                        <button class="btn btn-outline-primary"><a href="#">Post an Event</a></button>
+                        <button class="btn btn-outline-primary"><a href="{{url_for('post_event')}}">Post an Event</a></button>
                     </li>
                     <li class="nav-item">
                         <button class="btn btn-outline-primary"><a href="{{url_for('logout')}}">Log Out</a></button>
