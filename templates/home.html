@@ -12,14 +12,62 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Evento</title>
-   
-    <title>Home</title>
-</head>
-
-<body>
-    <h1>Login Authentication System in Flask.</h1>
-    <a href="{{ url_for('login') }}">Login Page</a><br>
-    <a href="{{ url_for('register') }}">Register Page</a><br>
-</body>
-
-</html>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    header {
+        background-color: #f8f9fa; 
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between; 
+        align-items: center;
+    }
+    .logo img {
+        height: 40px; 
+        width: auto; 
+        margin-right: 75px;
+    }
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+    
+    nav ul li {
+        margin-left: 20px; 
+    }
+    
+    nav ul li:first-child {
+        margin-left: 0; 
+    }
+    
+    nav ul li a {
+        text-decoration: none;
+        color: #007bff; 
+        font-weight: bold;
+    }
+    
+    nav ul li a:hover {
+        text-decoration: underline;
+    }
+    
+    </style>
+    <body>
+        <header>
+            <div class="logo">
+                <img src="/static/logo/png/logo-no-background.png" alt="Logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                </ul>
+            </nav>
+        </header>
+    </body>
+    </html>
+    
