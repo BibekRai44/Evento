@@ -57,19 +57,20 @@
     
     </style>
     <body>
-        <header>
-            <div class="logo">
-                <a href="/">
-                    <img src="/static/logo/png/logo-no-background.png" alt="Logo">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="/static/logo/png/logo-no-background.png" height="40px" width="auto">
                 </a>
-            </div>
-            <nav>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <ul>
                     <li><a href="{{ url_for('login') }}">Login</a></li>
                     <li><a href="{{ url_for('register') }}">Register</a></li>
                 </ul>
-            </nav>
-        </header>
+            </div>
+        </nav>
     </body>
     </html>
     
