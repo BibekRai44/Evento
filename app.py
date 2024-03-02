@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect,request
+from flask import Flask, render_template, url_for, redirect,request,flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -28,16 +28,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
 
-class Event(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    eventname = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.String(100), nullable=False)
-    location = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.String(100), nullable=False)
-    time = db.Column(db.String(100), nullable=False)
-    image = db.Column(db.String(100), nullable=False)
-    duration = db.Column(db.String(100), nullable=False)
+
 class RegisterForm(FlaskForm):
     username = StringField(validators=[
                            InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
@@ -81,44 +72,28 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    events=Event.query.all()
-    return render_template('dashboard.html',events=events)
-
-@app.route('/logout')
+@app.route('/logout',methods=['GET','POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/dashboard',methods=['GET','POST'])
+@login_required
+def dashboard():  
+    return render_template('dashboard.html')
+
 @app.route('/post_event', methods=['GET', 'POST'])
 @login_required
 def post_event():
-    if request.method == 'POST':
-        eventname = request.form.get('eventname')
-        date = request.form.get('date')
-        location = request.form.get('location')
-        description = request.form.get('description')
-        date=request.form.get('date')
-        time=request.form.get('time')
-        image=request.form.get('image')
-        duration=request.form.get('duration')
-        event=Event(eventname=eventname,date=date,location=location,description=description,time=time,image=image,duration=duration)
-        db.session.add(event)
-        db.session.commit()
-        Flask('Event Posted Successfully', 'success')
-        return redirect(url_for('dashboard'))
     return render_template('post_event.html')
-
 
 @ app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(form.password.data)
         new_user = User(username=form.username.data, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
