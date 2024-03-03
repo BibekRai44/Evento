@@ -5,6 +5,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+from sqlalchemy import inspect
+import os
+
+
 
 app = Flask(__name__)
 
@@ -28,7 +32,23 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
 
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    eventname = db.Column(db.String(255), nullable=False)
+    duration = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(1024), nullable=False)
+    time = db.Column(db.String(100), nullable=False)
 
+db.create_all()
+
+inspector = inspect(db.engine)
+if 'event' in inspector.get_table_names():
+    print("Event table exists in the database.")
+else:
+    print("Event table does not exist in the database.")
+    
 class RegisterForm(FlaskForm):
     username = StringField(validators=[
                            InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
@@ -55,10 +75,76 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
+class eventForm(FlaskForm):
+    eventname = StringField(validators=[
+                           InputRequired(), Length(min=4, max=255)], render_kw={"placeholder": "Event Name"})
+
+    duration = StringField(validators=[
+                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Duration"})
+
+    date = StringField(validators=[
+                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Date"})
+
+    location = StringField(validators=[
+                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Location"})
+
+    description = StringField(validators=[
+                           InputRequired(), Length(min=4, max=1024)], render_kw={"placeholder": "Description"})
+    time=StringField(validators=[
+                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Time"})
+    
+
+    submit = SubmitField('Post Event')
+
+    def validate_eventname(self, eventname):
+        existing_eventname = Event.query.filter_by(
+            eventname=eventname.data).first()
+        if existing_eventname:
+            raise ValidationError(
+                'That event name already exists. Please choose a different one.')
+
+    def validate_duration(self, duration):
+        existing_duration = Event.query.filter_by(
+            duration=duration.data).first()
+        if existing_duration:
+            raise ValidationError(
+                'That duration already exists. Please choose a different one.')
+    
+    def validate_time(self, time):
+        existing_time = Event.query.filter_by(
+            time=time.data).first()
+        if existing_time:
+            raise ValidationError(
+                'That time already exists. Please choose a different one.')
+
+    def validate_date(self, date):
+        existing_date = Event.query.filter_by(
+            date=date.data).first()
+        if existing_date:
+            raise ValidationError(
+                'That date already exists. Please choose a different one.')
+
+    def validate_location(self, location):
+        existing_location = Event.query.filter_by(
+            location=location.data).first()
+        if existing_location:
+            raise ValidationError(
+                'That location already exists. Please choose a different one.')
+
+    def validate_description(self, description):
+        existing_description = Event.query.filter_by(
+            description=description.data).first()
+        if existing_description:
+            raise ValidationError(
+                'That description already exists. Please choose a different one.')
 
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/team')
+def team():
+    return render_template('team.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -78,15 +164,33 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/dashboard',methods=['GET','POST'])
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():  
-    return render_template('dashboard.html')
+    events = Event.query.all()
+    return render_template('dashboard.html', events=events)
+
+
 
 @app.route('/post_event', methods=['GET', 'POST'])
 @login_required
 def post_event():
-    return render_template('post_event.html')
+    form = eventForm()
+    print("form data",request.form)
+    if form.validate_on_submit():
+        event = Event(
+            eventname=form.eventname.data,
+            duration=form.duration.data,
+            date=form.date.data,
+            location=form.location.data,
+            description=form.description.data,
+            time=form.time.data
+        )
+        db.session.add(event)
+        db.session.commit()
+        flash('Event posted successfully!', 'success')
+        return redirect(url_for('dashboard'))
+    return render_template('post_event.html', form=form)
 
 @ app.route('/register', methods=['GET', 'POST'])
 def register():
