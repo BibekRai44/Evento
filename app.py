@@ -44,6 +44,7 @@ class Event(db.Model):
     time = db.Column(db.String(100), nullable=False)
     organizer = db.Column(db.String(100), nullable=False)
     contactorganizer = db.Column(db.String(100), nullable=False)
+    tags = db.Column(db.String(100), nullable=False)
     
 db.create_all()
 
@@ -100,6 +101,8 @@ class eventForm(FlaskForm):
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Contact Organizer"})
     time=StringField(validators=[
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Time"})
+    tags=StringField(validators=[
+                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Tags"})
  
 
     submit = SubmitField('Post Event')
@@ -140,6 +143,10 @@ class eventForm(FlaskForm):
     def validate_description(self, description):
         existing_description = Event.query.filter_by(
             description=description.data).first()
+    
+    def validate_tags(self, tags):
+        existing_tags = Event.query.filter_by(
+            tags=tags.data).first()
         
         
     
@@ -200,6 +207,13 @@ def update_event_page(event_id):
     event = Event.query.get_or_404(event_id)
     return render_template('update_event.html', event=event)
 
+@app.route('/search', methods=['POST'])
+def search():
+    search_query = request.form['search_query']
+    events = Event.query.filter(Event.tags.contains(search_query)).all()
+    return render_template('search_results.html', events=events, search_query=search_query)
+
+
 @app.route('/post_event', methods=['GET', 'POST'])
 @login_required
 def post_event():
@@ -215,7 +229,8 @@ def post_event():
             description=form.description.data,
             time=form.time.data,
             organizer=form.organizer.data,
-            contactorganizer=form.contactorganizer.data
+            contactorganizer=form.contactorganizer.data,
+            tags=form.tags.data
             
         )
         db.session.add(event)
