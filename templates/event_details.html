@@ -27,6 +27,7 @@
                         <p><strong>Time:</strong> {{ event.time }}</p>
                         <p><strong>Organized By:</strong> {{ event.organizer }}</p>
                         <p><strong>Contact Organizer:</strong> {{ event.contactorganizer }}</p>
+                        <p><strong>Tags:</strong>{{event.tags}}</p>
                         <p><strong>Description:</strong> {{ event.description }}</p>
                         <form method="POST" action="{{ url_for('delete_event', event_id=event.id) }}" style="display: inline;">
                             <input type="hidden" name="_method" value="DELETE">
