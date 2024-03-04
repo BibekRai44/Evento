@@ -11,10 +11,6 @@ from flask_bcrypt import Bcrypt
 from flask_wtf.file import FileField, FileAllowed
 from sqlalchemy import inspect
 import os
-
-
-
-
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
@@ -180,14 +176,29 @@ def dashboard():
     events = Event.query.all()
     return render_template('dashboard.html', events=events)
 
+#@app.route('/update_event_submit',methods=['GET','POST'])
+#@login_required
+#def update_event_submit():
+    #return render_template('update_event.html')
+
 @app.route('/event_details/<int:event_id>')
 def event_details(event_id):
-    # Retrieve the event details from the database using the event_id
     event = Event.query.get_or_404(event_id)
     return render_template('event_details.html', event=event)
 
+@app.route('/event/delete/<int:event_id>', methods=['POST', 'DELETE'])
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    db.session.delete(event)
+    db.session.commit()
+    flash('Event deleted successfully!', 'success')
+    return redirect(url_for('dashboard'))
 
 
+@app.route('/update_event/<int:event_id>', methods=['GET'])
+def update_event_page(event_id):
+    event = Event.query.get_or_404(event_id)
+    return render_template('update_event.html', event=event)
 
 @app.route('/post_event', methods=['GET', 'POST'])
 @login_required
