@@ -20,6 +20,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h2>{{ event.eventname }}</h2>
+                        
                         <p><strong>Duration:</strong> {{ event.duration }}</p>
                         <p><strong>Date:</strong> {{ event.date }}</p>
                         <p><strong>Location:</strong> {{ event.location }}</p>
@@ -27,6 +28,12 @@
                         <p><strong>Organized By:</strong> {{ event.organizer }}</p>
                         <p><strong>Contact Organizer:</strong> {{ event.contactorganizer }}</p>
                         <p><strong>Description:</strong> {{ event.description }}</p>
+                        <form method="POST" action="{{ url_for('delete_event', event_id=event.id) }}" style="display: inline;">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger">Delete Event</button>
+                        </form>
+                        <a href="{{ url_for('update_event_page', event_id=event.id) }}" class="btn btn-success">Update Event</a>
+
                         <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
                     </div>
                 </div>
