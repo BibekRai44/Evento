@@ -180,6 +180,13 @@ def dashboard():
     events = Event.query.all()
     return render_template('dashboard.html', events=events)
 
+@app.route('/event_details/<int:event_id>')
+def event_details(event_id):
+    # Retrieve the event details from the database using the event_id
+    event = Event.query.get_or_404(event_id)
+    return render_template('event_details.html', event=event)
+
+
 
 
 @app.route('/post_event', methods=['GET', 'POST'])
