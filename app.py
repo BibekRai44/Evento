@@ -1,14 +1,10 @@
 from flask import Flask, render_template, url_for, redirect,request,flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_uploads import configure_uploads, IMAGES, UploadSet
-from werkzeug.utils import secure_filename
-from werkzeug.datastructures import  FileStorage
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-from flask_wtf.file import FileField, FileAllowed
 from sqlalchemy import inspect
 import os
 app = Flask(__name__)
