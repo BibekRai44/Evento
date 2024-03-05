@@ -59,10 +59,19 @@
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
-                    {{ form.username(class="form-control",placeholder="Username") }}
+                    <label for="username">Username</label>
+                    {{ form.username(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    {{ form.email(class="form-control") }}
+                <div>
+                    <label for="password">Password</label>
+                    {{ form.password(class="form-control") }}
                 </div>
                 <div>
-                    {{ form.password(class="form-control",placeholder="Password") }}
+                    <label for="confirm_password">Confirm Password</label>
+                    {{ form.confirm_password(class="form-control") }}
                 </div>
                 <br>
                 <button type="submit" class="btn btn-primary btn-register">Sign Up</button>
