@@ -1,9 +1,9 @@
 from flask import Flask, render_template, url_for, redirect,request,flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+from wtforms.validators import InputRequired, Length, ValidationError,EqualTo
 from flask_bcrypt import Bcrypt
 from sqlalchemy import inspect
 import os
@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,7 +42,7 @@ class Event(db.Model):
     organizer = db.Column(db.String(100), nullable=False)
     contactorganizer = db.Column(db.String(100), nullable=False)
     tags = db.Column(db.String(100), nullable=False)
-    
+
 db.create_all()
 
 inspector = inspect(db.engine)
@@ -52,10 +53,14 @@ else:
     
 class RegisterForm(FlaskForm):
     username = StringField(validators=[
-                           InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
+                           InputRequired(), Length(min=4, max=20)])
+    email = StringField(validators=[
+                        InputRequired(), Length(min=4, max=120)])
 
     password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
+                             InputRequired(), Length(min=8, max=20)])
+    confirm_password = PasswordField(validators=[
+                             InputRequired(), EqualTo('password', message='Passwords must match')])
 
     submit = SubmitField('Register')
 
@@ -155,6 +160,11 @@ def home():
 def team():
     return render_template('team.html')
 
+@app.route('/service')
+def service():
+    return render_template('service.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -189,6 +199,20 @@ def event_details(event_id):
     event = Event.query.get_or_404(event_id)
     return render_template('event_details.html', event=event)
 
+@app.route('/filter', methods=['GET', 'POST'])
+def filter_events():
+    if request.method == 'POST':
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+        
+        # Query the database to filter events based on the date range
+        filtered_events = Event.query.filter(Event.date.between(start_date, end_date)).all()
+        
+        return render_template('filter_results.html', events=filtered_events)
+    
+    return render_template('filter.html')
+
+
 @app.route('/event/delete/<int:event_id>', methods=['POST', 'DELETE'])
 def delete_event(event_id):
     event = Event.query.get_or_404(event_id)
@@ -215,7 +239,6 @@ def update_event_page(event_id):
         db.session.commit()
         return redirect(url_for('event_details', event_id=event.id))
     return render_template('update_event.html', event=event)
-
 
     
 
@@ -260,7 +283,7 @@ def register():
 
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password=hashed_password)
+        new_user = User(username=form.username.data, password=hashed_password,email=form.email.data)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
