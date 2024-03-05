@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Events</title>
+    <!-- Add any additional CSS or JavaScript links here -->
+    <style>
+        /* Add custom CSS styles here */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Filter Events</h1>
+    <div class="container">
+        <form action="{{ url_for('filter_events') }}" method="POST">
+            <div class="form-group">
+                <label for="start_date">Start Date</label>
+                <input type="date" class="form-control" id="start_date" name="start_date">
+            </div>
+            <div class="form-group">
+                <label for="end_date">End Date</label>
+                <input type="date" class="form-control" id="end_date" name="end_date">
+            </div>
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </form>
+    </div>
+    <!-- Add any additional scripts here -->
+</body>
+</html>
