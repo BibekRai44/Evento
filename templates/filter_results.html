@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtered Events</title>
+    <!-- Add any additional CSS styles here -->
+    <style>
+        /* Add custom CSS styles here */
+        /* Add custom CSS styles here */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .event-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .event-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Filtered Events</h1>
+        <ul class="event-list">
+            {% for event in events %}
+            <li class="event-item">
+                <strong>{{ event.eventname }}</strong> - {{ event.date }}
+                <!-- You can add more event details here if needed -->
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
