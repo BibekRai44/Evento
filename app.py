@@ -202,10 +202,27 @@ def delete_event(event_id):
     return redirect(url_for('dashboard'))
 
 
-@app.route('/update_event/<int:event_id>', methods=['GET'])
+@app.route('/update_event/<int:event_id>', methods=['GET','POST'])
 def update_event_page(event_id):
     event = Event.query.get_or_404(event_id)
+    if request.method == 'POST':
+        # Handle the form submission
+        event.eventname = request.form['eventname']
+        event.duration = request.form['duration']
+        event.date = request.form['date']
+        event.location = request.form['location']
+        event.time = request.form['time']
+        event.organizer = request.form['organizer']
+        event.contactorganizer = request.form['contactorganizer']
+        event.tags = request.form['tags']
+        event.description = request.form['description']
+        db.session.commit()
+        return redirect(url_for('event_details', event_id=event.id))
     return render_template('update_event.html', event=event)
+
+
+    
+
 
 @app.route('/search', methods=['POST'])
 def search():
