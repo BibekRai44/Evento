@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filter Events</title>
-    <!-- Add any additional CSS or JavaScript links here -->
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Evento">
+    <meta name="author" content="Evento">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-        /* Add custom CSS styles here */
+        
         .container {
             max-width: 500px;
             margin: 0 auto;
@@ -25,7 +29,29 @@
     </style>
 </head>
 <body>
-    <h1>Filter Events</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{{url_for('dashboard')}}">
+                <img src="/static/logo/png/logo-no-background.png" height="40px" width="auto">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mr-3">
+                        <button class="btn btn-outline-primary"><a href="{{url_for('dashboard')}}">Home</a></button>
+                    </li>
+                    <li class="nav-item mr-3">
+                        <button class="btn btn-outline-primary"><a href="{{url_for('post_event')}}">Post an Event</a></button>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-primary"><a href="{{url_for('logout')}}">Log Out</a></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <h1 style="text-align: center;">Filter Events</h1>
     <div class="container">
         <form action="{{ url_for('filter_events') }}" method="POST">
             <div class="form-group">
@@ -36,7 +62,7 @@
                 <label for="end_date">End Date</label>
                 <input type="date" class="form-control" id="end_date" name="end_date">
             </div>
-            <button type="submit" class="btn btn-primary">Apply Filters</button>
+            <button type="submit" class="btn btn-primary" style="margin-left: 175px;">Apply Filters</button>
         </form>
     </div>
     <!-- Add any additional scripts here -->

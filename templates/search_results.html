@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
+    <!-- Required meta tags -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Evento">
+    <meta name="author" content="Evento">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
@@ -42,7 +45,9 @@
                     <button type="submit" class="btn btn-primary" style="margin-left: 5px;">Search</button>
                 </div>
             </form>
-            
+            <button style="margin-left: 25px;" class="btn btn-primary">
+                <a href="{{ url_for('filter_events') }}" style="color: white; text-decoration: none;">Filter Events</a>
+            </button>
         </div>    
     </div>
     <div class="container mt-5">
