@@ -51,6 +51,9 @@
             justify-content: center;
             height: 100vh; 
         }
+        .alert{
+            color: red;
+        }
     </style>
 </head>
 
@@ -58,7 +61,7 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
+                <div class="alert alert-{{ category }}" role="alert">
                     {{ message }}
                 </div>
             {% endfor %}

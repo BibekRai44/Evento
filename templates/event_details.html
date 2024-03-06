@@ -55,7 +55,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h2>{{ event.eventname }}</h2>
-                        
+                        {% if event.image_path %}
+                        <!-- Use the correct path to reference the image -->
+                        <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="img-fluid" alt="Event Image">
+                        {% else %}
+                        <p>No image available</p>
+                        {% endif %}
+                        <br>
                         <p><strong>Duration:</strong> {{ event.duration }}</p>
                         <p><strong>Date:</strong> {{ event.date }}</p>
                         <p><strong>Location:</strong> {{ event.location }}</p>
