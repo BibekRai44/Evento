@@ -7,12 +7,20 @@ from wtforms.validators import InputRequired, Length, ValidationError,EqualTo,Re
 from flask_bcrypt import Bcrypt
 from sqlalchemy import inspect
 import os
+from flask import Flask, flash, request, redirect, url_for
+from werkzeug.utils import secure_filename
+from flask_wtf.file import FileField, FileRequired
+
+
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+
 db = SQLAlchemy(app)
 app.app_context().push()
 
@@ -42,6 +50,8 @@ class Event(db.Model):
     organizer = db.Column(db.String(100), nullable=False)
     contactorganizer = db.Column(db.String(100), nullable=False)
     tags = db.Column(db.String(100), nullable=False)
+    image_path = db.Column(db.String(255), nullable=True)
+
 
 db.create_all()
 
@@ -89,7 +99,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 
-class eventForm(FlaskForm):
+class EventForm(FlaskForm):
     eventname = StringField(validators=[
                            InputRequired(), Length(min=4, max=255)], render_kw={"placeholder": "Event Name"})
 
@@ -112,6 +122,7 @@ class eventForm(FlaskForm):
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Time"})
     tags=StringField(validators=[
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Tags"})
+    image = FileField(validators=[FileRequired()])
  
 
     submit = SubmitField('Post Event')
@@ -269,9 +280,12 @@ def search():
 @app.route('/post_event', methods=['GET', 'POST'])
 @login_required
 def post_event():
-    form = eventForm()
-    
+    form = EventForm()
     if form.validate_on_submit():
+        image_file = form.image.data
+        filename = secure_filename(image_file.filename)
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        image_file.save(image_path)
         print("Form data:", request.form)
         event = Event(
             eventname=form.eventname.data,
@@ -282,8 +296,9 @@ def post_event():
             time=form.time.data,
             organizer=form.organizer.data,
             contactorganizer=form.contactorganizer.data,
-            tags=form.tags.data
-            
+            tags=form.tags.data,
+            image_path=filename
+                       
         )
         db.session.add(event)
         db.session.commit()
