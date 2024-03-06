@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError,EqualTo
+from wtforms.validators import InputRequired, Length, ValidationError,EqualTo,Regexp
 from flask_bcrypt import Bcrypt
 from sqlalchemy import inspect
 import os
@@ -58,11 +58,12 @@ class RegisterForm(FlaskForm):
                         InputRequired(), Length(min=4, max=120)])
 
     password = PasswordField(validators=[
-                             InputRequired(), Length(min=8, max=20)])
+                             InputRequired()])
     confirm_password = PasswordField(validators=[
                              InputRequired(), EqualTo('password', message='Passwords must match')])
 
     submit = SubmitField('Register')
+
 
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(
@@ -70,6 +71,13 @@ class RegisterForm(FlaskForm):
         if existing_user_username:
             raise ValidationError(
                 'That username already exists. Please choose a different one.')
+        
+    def validate_email(self, email):
+        existing_user_email = User.query.filter_by(
+            email=email.data).first()
+        if existing_user_email:
+            raise ValidationError(
+                'That email address is already registered.')
         
 class LoginForm(FlaskForm):
     username = StringField(validators=[
@@ -160,6 +168,11 @@ def home():
 def team():
     return render_template('team.html')
 
+@app.route('/postevent')
+def postevent():
+    return render_template('login.html')
+
+
 @app.route('/service')
 def service():
     return render_template('service.html')
@@ -170,10 +183,12 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user)
-                return redirect(url_for('dashboard'))
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user)
+            flash('Logged in successfully.', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid username or password', 'error')
     return render_template('login.html', form=form)
 
 
@@ -181,6 +196,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    flash('Logged out successfully.', 'success')
     return redirect(url_for('login'))
 
 @app.route('/dashboard', methods=['GET', 'POST'])
@@ -286,6 +302,7 @@ def register():
         new_user = User(username=form.username.data, password=hashed_password,email=form.email.data)
         db.session.add(new_user)
         db.session.commit()
+        flash('User registration successful. Please login.', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
