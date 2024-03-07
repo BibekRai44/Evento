@@ -54,6 +54,15 @@
     nav ul li a:hover {
         text-decoration: underline;
     }
+    .card {
+        margin-bottom: 20px;
+        transition: transform 0.2s;
+    }
+    .card-img-top {
+        object-fit: cover;
+        height: 200px;
+        width: 100%;
+    }
     
     </style>
     <body>
@@ -74,7 +83,32 @@
                 </ul>
             </div>
         </nav>
-        <img src="/static/images/home.png" height="750px" width="1450px">
+        <div style="display: flex; justify-content: center;">
+            <div style="display: flex; justify-content: center;">
+                <form action="{{ url_for('search') }}" method="POST">
+                    <div class="form-outline" data-mdb-input-init style="width: 300px; display: flex;">
+                        <input id="search-focus" type="search" class="form-control" name="search_query" placeholder="Search Events" style="flex: 1;">
+                        <button type="submit" class="btn btn-primary" style="margin-left: 5px;">Search</button>
+                    </div>
+                </form>
+                <button style="margin-left: 25px;" class="btn btn-primary">
+                    <a href="{{ url_for('filter_events') }}" style="color: white; text-decoration: none;">Filter Events</a>
+                </button>
+            </div>    
+        </div>
+        <br>
+        <!-- Iterate over events and display them -->
+{% for event in events %}
+<div class="card">
+    <a href="{{ url_for('event_details', event_id=event.id) }}">
+        <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+    </a>
+    <div class="card-body">
+        <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+    </div>
+</div>
+{% endfor %}
+
     </body>
     </html>
     

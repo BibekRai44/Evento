@@ -52,14 +52,17 @@
             <div class="form-group"> 
                 <label for="eventLocation">Location<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="location" id="eventLocation" placeholder="Enter event location" required>
+                <small id="emailHelp" class="form-text text-muted">Enter plain text or a link</small>
             </div>
             <div class="form-group">
                 <label for="eventOrganizer">Organized By<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="organizer" id="eventOrganizer" required>
+                <small id="emailHelp" class="form-text text-muted">Enter plain text or a link</small>
             </div>
             <div class="form-group">
                 <label for="eventContactOrganizer">Contact Organizer<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="contactorganizer" id="eventContactOrganizer" required>
+                <small id="emailHelp" class="form-text text-muted">Enter plain text or a link</small>
             </div>
             <div class="form-group">
                 <label for="eventDate">Date<span class="text-danger">*</span></label>
@@ -74,17 +77,30 @@
                 <input type="time" class="form-control" name="time" id="eventTime" required>
             </div>
             <div class="form-group">
-                <label for="eventTags">Tags<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="tags" id="eventTags" placeholder="Enter tags separated by commas" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="eventDescription">Description</label>
-                <textarea class="form-control" id="eventDescription" name="description" rows="3" minlength="10" maxlength="9999"></textarea>
+                <label for="eventCategory">Category<span class="text-danger">*</span></label>
+                <select class="form-control" id="eventCategory" name="category" required>
+                    <option value="" disabled selected>Select category</option>
+                    <option value="Seminars">Seminars</option>
+                    <option value="Exhibitions">Exhibitions</option>
+                    <option value="Orientation">Orientation</option>
+                    <option value="Workshops">Workshops</option>
+                    <option value="Conferences">Conferences</option>
+                    <option value="Meetings">Meetings</option>
+                    <option value="Festivals">Festivals</option>
+                    <option value="Concerts">Concerts</option>
+                    <option value="Social">Social</option>
+                    <option value="Sports">Sports</option>
+                    <option value="others">Others</option>
+                    
+                </select>
             </div>
             <div class="form-group">
                 <label for="eventImage">Event Image<span class="text-danger">*</span></label>
                 <input type="file" class="form-control-file" name="image" id="eventImage" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <label for="eventDescription">Description</label>
+                <textarea class="form-control" id="eventDescription" name="description" rows="3" minlength="10" maxlength="9999"></textarea>
             </div>
             <button type="submit" class="btn btn-outline-primary">Post</button>
         </form>

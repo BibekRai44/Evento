@@ -50,9 +50,24 @@
                                 <input type="text" class="form-control" id="contactorganizer" name="contactorganizer" value="{{ event.contactorganizer }}" required>
                             </div>
                             <div class="form-group">
-                                <label for="eventTags">Tags<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="tags" id="eventTags" value="{{event.tags}}" placeholder="Enter tags separated by commas" required>
+                                <label for="eventCategory">Category<span class="text-danger">*</span></label>
+                                <select class="form-control" id="eventCategory" name="category" required>
+                                    <option value="" disabled selected>Select category</option>
+                                    <option value="Seminars">Seminars</option>
+                                    <option value="Exhibitions">Exhibitions</option>
+                                    <option value="Orientation">Orientation</option>
+                                    <option value="Workshops">Workshops</option>
+                                    <option value="Conferences">Conferences</option>
+                                    <option value="Meetings">Meetings</option>
+                                    <option value="Festivals">Festivals</option>
+                                    <option value="Concerts">Concerts</option>
+                                    <option value="Social">Social</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="others">Others</option>
+                                    
+                                </select>
                             </div>
+
                             <div class="form-group">
                                 <label for="description">Description</span></label>
                                 <textarea class="form-control" id="description" name="description" rows="3" required>{{ event.description }}</textarea>
