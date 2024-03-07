@@ -10,7 +10,7 @@ import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask_wtf.file import FileField, FileRequired
-
+from sqlalchemy import or_
 
 app = Flask(__name__)
 
@@ -49,7 +49,7 @@ class Event(db.Model):
     time = db.Column(db.String(100), nullable=False)
     organizer = db.Column(db.String(100), nullable=False)
     contactorganizer = db.Column(db.String(100), nullable=False)
-    tags = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(100), nullable=False)
     image_path = db.Column(db.String(255), nullable=True)
 
 
@@ -120,8 +120,8 @@ class EventForm(FlaskForm):
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Contact Organizer"})
     time=StringField(validators=[
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Time"})
-    tags=StringField(validators=[
-                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Tags"})
+    category = StringField(validators=[
+                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Category"})
     image = FileField(validators=[FileRequired()])
  
 
@@ -164,16 +164,17 @@ class EventForm(FlaskForm):
         existing_description = Event.query.filter_by(
             description=description.data).first()
     
-    def validate_tags(self, tags):
-        existing_tags = Event.query.filter_by(
-            tags=tags.data).first()
+    def validate_category(self, category):
+        existing_category = Event.query.filter_by(
+            category=category.data).first()
         
         
     
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    events=Event.query.all()
+    return render_template('home.html',events=events)
 
 @app.route('/team')
 def team():
@@ -206,6 +207,7 @@ def login():
 @app.route('/logout',methods=['GET','POST'])
 @login_required
 def logout():
+    
     logout_user()
     flash('Logged out successfully.', 'success')
     return redirect(url_for('login'))
@@ -241,6 +243,7 @@ def filter_events():
 
 
 @app.route('/event/delete/<int:event_id>', methods=['POST', 'DELETE'])
+@login_required
 def delete_event(event_id):
     event = Event.query.get_or_404(event_id)
     db.session.delete(event)
@@ -250,6 +253,7 @@ def delete_event(event_id):
 
 
 @app.route('/update_event/<int:event_id>', methods=['GET','POST'])
+@login_required
 def update_event_page(event_id):
     event = Event.query.get_or_404(event_id)
     if request.method == 'POST':
@@ -261,7 +265,7 @@ def update_event_page(event_id):
         event.time = request.form['time']
         event.organizer = request.form['organizer']
         event.contactorganizer = request.form['contactorganizer']
-        event.tags = request.form['tags']
+        event.category = request.form['category']
         event.description = request.form['description']
         db.session.commit()
         return redirect(url_for('event_details', event_id=event.id))
@@ -273,9 +277,21 @@ def update_event_page(event_id):
 @app.route('/search', methods=['POST'])
 def search():
     search_query = request.form['search_query']
-    events = Event.query.filter(Event.tags.contains(search_query)).all()
-    return render_template('search_results.html', events=events, search_query=search_query)
+    category = request.form.get('category')  # Get the category from the form data
 
+    # List of sports names
+    sports_names = ['cricket', 'football', 'tennis', 'basketball']  # Add more sports as needed
+
+    # Check if the search query matches any sports name and if the category is not specified
+    if any(sport_name in search_query.lower() for sport_name in sports_names) and not category:
+        category = 'Sports'
+
+    if category == 'all':
+        events = Event.query.filter(Event.category.contains(search_query)).all()
+    else:
+        events = Event.query.filter(Event.category.contains(search_query), Event.category == category).all()
+
+    return render_template('search_results.html', events=events, search_query=search_query, category=category)
 
 @app.route('/post_event', methods=['GET', 'POST'])
 @login_required
@@ -296,7 +312,7 @@ def post_event():
             time=form.time.data,
             organizer=form.organizer.data,
             contactorganizer=form.contactorganizer.data,
-            tags=form.tags.data,
+            category=form.category.data,
             image_path=filename
                        
         )
@@ -321,6 +337,7 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html', form=form)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
