@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect,request,flash
+from flask import Flask, render_template, url_for, redirect,request,flash,abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from flask_wtf import FlaskForm
@@ -11,6 +11,7 @@ from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask_wtf.file import FileField, FileRequired
 from sqlalchemy import or_
+from sqlalchemy.orm import relationship
 
 
 app = Flask(__name__)
@@ -34,11 +35,25 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+saved_events = db.Table('saved_events',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True)
+)
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
+    saved_events = db.relationship('Event', secondary=saved_events, backref='saved_by')
+
+
+
+
+class SavedEvent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -213,21 +228,70 @@ def logout():
     flash('Logged out successfully.', 'success')
     return redirect(url_for('login'))
 
+@app.route('/save_event/<int:event_id>', methods=['GET', 'POST'])
+@login_required
+def save_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    user = current_user
+
+    
+    if event in user.saved_events:
+        flash('Event already saved.', 'warning')
+    else:
+        user.saved_events.append(event)
+        db.session.commit()
+        flash('Event saved successfully!', 'success')
+
+    return redirect(url_for('dashboard', event_id=event.id,saved=True))
+
+@app.route('/remove_saved_event/<int:event_id>', methods=['POST'])
+@login_required
+def remove_saved_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    user = current_user
+
+    if event in user.saved_events:
+        user.saved_events.remove(event)
+        db.session.commit()
+        flash('Event removed from saved events successfully!', 'success')
+    else:
+        flash('Event not found in saved events.', 'warning')
+
+    return redirect(url_for('profile', user_id=user.id))
+
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():  
     events = Event.query.all()
     return render_template('dashboard.html', events=events)
 
-#@app.route('/update_event_submit',methods=['GET','POST'])
-#@login_required
-#def update_event_submit():
-    #return render_template('update_event.html')
+
+@app.route('/profile/<int:user_id>',methods=['GET','POST'])
+@login_required
+def profile(user_id):
+    if current_user.id != user_id:
+        abort(403)  # User can only view their own profile
+    
+    user = User.query.get_or_404(user_id)
+    saved_events = user.saved_events
+    return render_template('profile.html', user=user, saved_events=saved_events)
 
 @app.route('/event_details/<int:event_id>')
 def event_details(event_id):
     event = Event.query.get_or_404(event_id)
-    return render_template('event_details.html', event=event)
+    saved_message = None
+
+    if current_user.is_authenticated:
+        if request.method == 'POST':
+            if event in current_user.saved_events:
+                saved_message = 'Event already saved.'
+            else:
+                current_user.saved_events.append(event)
+                db.session.commit()
+                saved_message = 'Event saved successfully!'
+
+    return render_template('event_details.html', event=event, saved_message=saved_message)
 
 @app.route('/filter', methods=['GET', 'POST'])
 def filter_events():
