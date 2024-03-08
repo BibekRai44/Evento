@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 from flask_wtf.file import FileField, FileRequired
 from sqlalchemy import or_
 
+
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
@@ -276,23 +277,49 @@ def update_event_page(event_id):
 
 @app.route('/search', methods=['POST'])
 def search():
-    search_query = request.form['search_query']
-    category = request.form.get('category')  # Get the category from the form data
+    search_query = request.form['search_query'].lower()  
 
-    # List of sports names
-    sports_names = ['cricket', 'football', 'tennis', 'basketball']  # Add more sports as needed
+    
+    categories = {
+        'Seminars': ['seminar', 'talk', 'lecture', 'panel', 'discussion', 'symposium', 'forum', 'presentation', 'workshop'],
+        'Exhibitions': ['exhibition', 'art', 'gallery', 'showcase', 'display', 'exposition', 'artwork', 'artist', 'artistic'],
+        'Orientation': ['orientation', 'new students', 'introduction', 'induction', 'orientation program', 'orientation session', 'freshman orientation'],
+        'Workshops': ['workshop', 'training', 'session', 'seminar', 'class', 'hands-on', 'learning', 'skills development', 'practical', 'educational'],
+        'Conferences': ['conference', 'meeting', 'summit', 'symposium', 'convention', 'forum', 'conclave', 'assembly', 'gathering'],
+        'Meetings': ['meeting', 'gathering', 'assembly', 'session', 'discussion', 'conference', 'conclave', 'summit'],
+        'Festivals': ['festival', 'celebration', 'holiday', 'carnival', 'fair', 'feast', 'party'],
+        'Concerts': ['concert', 'music', 'live', 'performance', 'gig', 'show', 'recital'],
+        'Social': ['social', 'networking', 'gathering', 'party', 'meetup', 'mixer'],
+        'Sports': ['football', 'soccer', 'basketball', 'cricket', 'tennis', 'volleyball', 'baseball'],
+        'Fitness and Workouts': ['fitness', 'workout', 'exercise', 'training', 'gym', 'yoga', 'pilates', 'crossfit', 'aerobics', 'zumba'],
+        'Food': ['food', 'culinary', 'cooking', 'cuisine', 'restaurant', 'chef', 'tasting', 'foodie', 'gastronomy', 'dining'],
+        'Religion': ['religion', 'faith', 'spirituality', 'worship', 'prayer', 'church', 'temple', 'mosque', 'synagogue', 'spiritual'],
+        'Arts and Culture': ['art', 'culture', 'heritage', 'history', 'museum', 'gallery', 'exhibition', 'cultural', 'artistic'],
+        'Entertainment': ['entertainment', 'fun', 'party', 'celebration', 'nightlife', 'music', 'dance', 'comedy', 'theatre', 'performance'],
+        'Technology': ['technology', 'tech', 'innovation', 'digital', 'computing', 'software', 'hardware', 'internet', 'gadgets', 'devices'],
+        'Business': ['business', 'entrepreneurship', 'startup', 'management', 'leadership', 'finance', 'economics', 'marketing', 'sales', 'strategy'],
+        'Science': ['science', 'research', 'innovation', 'discovery', 'technology', 'engineering', 'biology', 'chemistry', 'physics', 'astronomy'],
+        
 
-    # Check if the search query matches any sports name and if the category is not specified
-    if any(sport_name in search_query.lower() for sport_name in sports_names) and not category:
-        category = 'Sports'
+        'Others': [],  
+    }
 
-    if category == 'all':
-        events = Event.query.filter(Event.category.contains(search_query)).all()
-    else:
-        events = Event.query.filter(Event.category.contains(search_query), Event.category == category).all()
+    # Default category
+    category = 'Others'
+
+    
+    for cat, keywords in categories.items():
+        if any(keyword in search_query for keyword in keywords):
+            category = cat
+            break
+
+    
+    events = Event.query.filter(Event.category == category).all()
 
     return render_template('search_results.html', events=events, search_query=search_query, category=category)
 
+
+    
 @app.route('/post_event', methods=['GET', 'POST'])
 @login_required
 def post_event():
