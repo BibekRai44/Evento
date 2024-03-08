@@ -14,6 +14,15 @@
 </head>
 
 <body>
+    {% if saved_message %}
+    <div class="alert alert-success" role="alert">
+        {{ saved_message }}
+    </div>
+    {% endif %}
+
+    <!-- Your event details HTML code here -->
+
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             {% if current_user.is_authenticated %}
@@ -31,7 +40,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item mr-3">
-                        <button class="btn btn-outline-primary"><a href="{{url_for('home')}}">Home</a></button>
+                        <button class="btn btn-outline-primary"><a href="{{url_for('dashboard')}}">Home</a></button>
                     </li>
                     <li class="nav-item mr-3">
                         <button class="btn btn-outline-primary"><a href="{{url_for('post_event')}}">Post an Event</a></button>
@@ -79,18 +88,20 @@
                         <p><strong>Contact Organizer:</strong> {{ event.contactorganizer }}</p>
                         <p><strong>Category:</strong>{{ event.category }}</p>
                         <p><strong>Description:</strong> {{ event.description }}</p>
-                        {% if current_user.is_authenticated %}
-                        <form method="POST" action="{{ url_for('delete_event', event_id=event.id) }}" style="display: inline;">
+                        {% if current_user.is_authenticated and event.organizer == current_user.username %}
+                        <form method="POST" action="{{ url_for('delete_event', event_id=event.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
                             <input type="hidden" name="_method" value="DELETE">
                             <button type="submit" class="btn btn-danger">Delete Event</button>
                         </form>
                         <a href="{{ url_for('update_event_page', event_id=event.id) }}" class="btn btn-success">Update Event</a>
+                        <a href="{{ url_for('save_event', event_id=event.id) }}" class="btn btn-success">Save Event</a>
                         <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
                         {% else %}
                         <a href="{{ url_for('login') }}" class="btn btn-danger">Delete Event</a>
                         <a href="{{ url_for('login') }}" class="btn btn-success">Update Event</a>
-                        <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
-                            
+                        <a href="{{ url_for('login')}}" class="btn btn-success">Save Event</a>
+                        <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a> 
+
                         {% endif %}
 
                     </div>
@@ -103,3 +114,4 @@
 </body>
 
 </html>
+
