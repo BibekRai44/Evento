@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect,request,flash,abort
+from flask import Flask, render_template, url_for, redirect,request,flash,abort,session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from flask_wtf import FlaskForm
@@ -12,6 +12,8 @@ from werkzeug.utils import secure_filename
 from flask_wtf.file import FileField, FileRequired
 from sqlalchemy import or_
 from sqlalchemy.orm import relationship
+from functools import wraps
+from datetime import timedelta
 
 
 app = Flask(__name__)
@@ -46,6 +48,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     saved_events = db.relationship('Event', secondary=saved_events, backref='saved_by')
+    
 
 
 
@@ -67,6 +70,9 @@ class Event(db.Model):
     contactorganizer = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(100), nullable=False)
     image_path = db.Column(db.String(255), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    user = db.relationship('User',backref=db.backref('events', lazy=True))
 
 
 db.create_all()
@@ -76,7 +82,6 @@ if 'event' in inspector.get_table_names():
     print("Event table exists in the database.")
 else:
     print("Event table does not exist in the database.")
-    
 class RegisterForm(FlaskForm):
     username = StringField(validators=[
                            InputRequired(), Length(min=4, max=20)])
@@ -189,6 +194,7 @@ class EventForm(FlaskForm):
 
 @app.route('/')
 def home():
+    app.permanent_session_lifetime = timedelta(seconds=180)
     events=Event.query.all()
     return render_template('home.html',events=events)
 
@@ -315,6 +321,8 @@ def filter_events():
 @login_required
 def delete_event(event_id):
     event = Event.query.get_or_404(event_id)
+    if current_user.id!=event.id:
+        abort(403)
     db.session.delete(event)
     db.session.commit()
     flash('Event deleted successfully!', 'success')
@@ -325,6 +333,8 @@ def delete_event(event_id):
 @login_required
 def update_event_page(event_id):
     event = Event.query.get_or_404(event_id)
+    if current_user.id!=event.id:
+        abort(403)
     if request.method == 'POST':
         # Handle the form submission
         event.eventname = request.form['eventname']
@@ -397,6 +407,7 @@ def post_event():
         filename = secure_filename(image_file.filename)
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         image_file.save(image_path)
+        user_id = current_user.id
         print("Form data:", request.form)
         event = Event(
             eventname=form.eventname.data,
@@ -408,7 +419,8 @@ def post_event():
             organizer=form.organizer.data,
             contactorganizer=form.contactorganizer.data,
             category=form.category.data,
-            image_path=filename
+            image_path=filename,
+            user_id=user_id
                        
         )
         db.session.add(event)
