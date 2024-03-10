@@ -65,51 +65,61 @@
     }
     
     </style>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="/">
-                    <img src="/static/logo/png/logo-no-background.png" height="40px" width="auto">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <ul>
-                    <li><a href="{{url_for('about_us')}}">About us</a></li>
-                    <li><a href="{{url_for('login')}}">Post Event</a></li>
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
-                </ul>
-            </div>
-        </nav>
-        <br>
-        <div style="display: flex; justify-content: center;">
-            <div style="display: flex; justify-content: center;">
-                <form action="{{ url_for('search') }}" method="POST">
-                    <div class="form-outline" data-mdb-input-init style="width: 300px; display: flex;">
-                        <input id="search-focus" type="search" class="form-control" name="search_query" placeholder="Search Events" style="flex: 1;">
-                        <button type="submit" class="btn btn-primary" style="margin-left: 5px;">Search</button>
-                    </div>
-                </form>
-                <button style="margin-left: 25px;" class="btn btn-primary">
-                    <a href="{{ url_for('filter_events') }}" style="color: white; text-decoration: none;">Filter Events</a>
-                </button>
-            </div>    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/static/logo/png/logo-no-background.png" height="40px" width="auto">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul>
+                <li><a href="{{url_for('about_us')}}">About us</a></li>
+                <li><a href="{{url_for('login')}}">Post Event</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+            </ul>
         </div>
-        <br>
-        <!-- Iterate over events and display them -->
-{% for event in events %}
-<div class="card">
-    <a href="{{ url_for('event_details', event_id=event.id) }}">
-        <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
-    </a>
-    <div class="card-body">
-        <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+    </nav>
+    <br>
+    <div style="display: flex; justify-content: center;">
+        <div style="display: flex; justify-content: center;">
+            <form action="{{ url_for('search') }}" method="POST">
+                <div class="form-outline" data-mdb-input-init style="width: 300px; display: flex;">
+                    <input id="search-focus" type="search" class="form-control" name="search_query" placeholder="Search Events" style="flex: 1;">
+                    <button type="submit" class="btn btn-primary" style="margin-left: 5px;">Search</button>
+                </div>
+            </form>
+            <button style="margin-left: 25px;" class="btn btn-primary">
+                <a href="{{ url_for('filter_events') }}" style="color: white; text-decoration: none;">Filter Events</a>
+            </button>
+        </div>    
     </div>
-</div>
-{% endfor %}
-<br>
-<footer style="text-align: center;">@2024 Copyright Evento</footer>
-    </body>
-    </html>
-    
+    <br>
+    <!-- Iterate over events and display them -->
+    <div class="row">
+        {% for event in events %}
+        <div class="col-md-6">
+            <div class="card">
+                <a href="{{ url_for('event_details', event_id=event.id) }}">
+                    <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+    <footer style="text-align: center;">@2024 Copyright Evento</footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>
