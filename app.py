@@ -41,6 +41,10 @@ saved_events = db.Table('saved_events',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True)
 )
+user_posted_events = db.Table('user_posted_events',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True)
+)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -48,6 +52,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     saved_events = db.relationship('Event', secondary=saved_events, backref='saved_by')
+    posted_events = db.relationship('Event', secondary=user_posted_events, backref='posted_by')
     
 
 
@@ -254,6 +259,15 @@ def save_event(event_id):
 
     return redirect(url_for('dashboard', event_id=event.id,saved=True))
 
+@app.route('/posted_events')
+@login_required
+def posted_events():
+    # Query the database for events posted by the current user
+    posted_events = current_user.posted_events
+    return render_template('profile.html', user_posted_events=posted_events)
+
+
+
 @app.route('/remove_saved_event/<int:event_id>', methods=['POST'])
 @login_required
 def remove_saved_event(event_id):
@@ -284,8 +298,9 @@ def profile(user_id):
         abort(403)  # User can only view their own profile
     
     user = User.query.get_or_404(user_id)
+    posted_events = user.posted_events
     saved_events = user.saved_events
-    return render_template('profile.html', user=user, saved_events=saved_events)
+    return render_template('profile.html', user=user, saved_events=saved_events,posted_events=posted_events)
 
 @app.route('/event_details/<int:event_id>')
 def event_details(event_id):
@@ -423,7 +438,9 @@ def post_event():
             user_id=user_id
                        
         )
+        
         db.session.add(event)
+        current_user.posted_events.append(event)
         db.session.commit()
         flash('Event posted successfully!', 'success')
         return redirect(url_for('dashboard'))
