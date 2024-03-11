@@ -80,8 +80,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="eventImage">Event Image<span class="text-danger">*</span></label>
-                                <input type="file" class="form-control-file" name="image" id="eventImage" accept="image/*" value="{{event.image}}" required>
+                                <label for="existingImage">Existing Image</label>
+                                <input type="text" class="form-control" id="existingImage" value="{{ event.image_path }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="eventDescription">Description</label>
