@@ -336,7 +336,7 @@ def filter_events():
 @login_required
 def delete_event(event_id):
     event = Event.query.get_or_404(event_id)
-    if current_user.id!=event.id:
+    if current_user.id!=event.user_id:
         abort(403)
     db.session.delete(event)
     db.session.commit()
@@ -348,7 +348,7 @@ def delete_event(event_id):
 @login_required
 def update_event_page(event_id):
     event = Event.query.get_or_404(event_id)
-    if current_user.id!=event.id:
+    if current_user.id!=event.user_id:
         abort(403)
     if request.method == 'POST':
         # Handle the form submission
@@ -361,6 +361,16 @@ def update_event_page(event_id):
         event.contactorganizer = request.form['contactorganizer']
         event.category = request.form['category']
         event.description = request.form['description']
+
+        if 'image' in request.files:
+            image_file = request.files['image']
+            if image_file.filename != '':
+                # Save the new image
+                filename = secure_filename(image_file.filename)
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                image_file.save(image_path)
+                event.image_path = filename
+
         db.session.commit()
         return redirect(url_for('event_details', event_id=event.id))
     return render_template('update_event.html', event=event)
