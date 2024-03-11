@@ -262,7 +262,7 @@ def save_event(event_id):
 @app.route('/posted_events')
 @login_required
 def posted_events():
-    # Query the database for events posted by the current user
+    
     posted_events = current_user.posted_events
     return render_template('profile.html', user_posted_events=posted_events)
 
@@ -295,7 +295,7 @@ def dashboard():
 @login_required
 def profile(user_id):
     if current_user.id != user_id:
-        abort(403)  # User can only view their own profile
+        abort(403)  
     
     user = User.query.get_or_404(user_id)
     posted_events = user.posted_events
@@ -324,7 +324,7 @@ def filter_events():
         start_date = request.form['start_date']
         end_date = request.form['end_date']
         
-        # Query the database to filter events based on the date range
+       
         filtered_events = Event.query.filter(Event.date.between(start_date, end_date)).all()
         
         return render_template('filter_results.html', events=filtered_events)
@@ -351,7 +351,7 @@ def update_event_page(event_id):
     if current_user.id!=event.user_id:
         abort(403)
     if request.method == 'POST':
-        # Handle the form submission
+        
         event.eventname = request.form['eventname']
         event.duration = request.form['duration']
         event.date = request.form['date']
@@ -365,7 +365,7 @@ def update_event_page(event_id):
         if 'image' in request.files:
             image_file = request.files['image']
             if image_file.filename != '':
-                # Save the new image
+                
                 filename = secure_filename(image_file.filename)
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 image_file.save(image_path)
