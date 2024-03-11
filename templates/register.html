@@ -108,45 +108,45 @@
         </div>
     </div>
     <script>
-        // Function to validate password
+       
         function validatePassword() {
             var password = document.getElementById('password').value;
             var passwordAlert = document.getElementById('passwordAlert');
             var errorMessage = '';
     
-            // Check if password length is less than 8 characters
+           
             if (password.length < 8) {
                 errorMessage += 'Password must be 8 or more characters long.<br>';
             }
     
-            // Check if password contains at least one capital letter
+            
             if (!/[A-Z]/.test(password)) {
                 errorMessage += 'Password must contain at least one capital letter.<br>';
             }
     
-            // Check if password contains at least one special character
+            
             if (!/[\W_]/.test(password)) {
                 errorMessage += 'Password must contain at least one special character.<br>';
             }
     
-            // Display the error message if there are any validation errors
+            
             if (errorMessage !== '') {
                 passwordAlert.innerHTML = errorMessage;
                 passwordAlert.style.display = 'block';
                 return false;
             }
     
-            // If all checks pass, hide the alert
+            
             passwordAlert.style.display = 'none';
             return true;
         }
     
-        // Listen for input event on the password field
+       
         document.getElementById('password').addEventListener('input', function(event) {
             validatePassword();
         });
     
-        // Submit event listener for the form
+        
         document.getElementById('registerForm').addEventListener('submit', function(event) {
             if (!validatePassword()) {
                 event.preventDefault();
