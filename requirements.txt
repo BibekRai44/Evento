@@ -1,7 +1,7 @@
-flask
-flask_sqlalchemy
-flask_login 
-flask_bcrypt 
-flask_wtf 
-wtforms 
-
+Flask==2.0.2
+Flask-SQLAlchemy==2.5.1
+Flask-Login==0.5.0
+Flask-WTF==0.15.1
+Flask-Bcrypt==0.7.1
+SQLAlchemy==1.4.31
+Werkzeug==2.0.2
