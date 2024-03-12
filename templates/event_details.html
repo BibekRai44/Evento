@@ -21,6 +21,21 @@
             margin: 0;
             padding: 0;
     }
+    dialog {
+            max-width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        dialog p {
+            margin: 0;
+            padding-bottom: 20px;
+        }
+        dialog button {
+            margin-right: 10px;
+        }
     </style>
     {% if saved_message %}
     <div class="alert alert-success" role="alert">
@@ -28,7 +43,7 @@
     </div>
     {% endif %}
 
-    <!-- Your event details HTML code here -->
+    
 
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -104,7 +119,6 @@
                     <div class="card-body">
                         <h2>{{ event.eventname }}</h2>
                         {% if event.image_path %}
-                        <!-- Use the correct path to reference the image -->
                         <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="img-fluid" alt="Event Image">
                         {% else %}
                         <p>No image available</p>
@@ -121,16 +135,23 @@
                         {% if current_user.is_authenticated %}
                         <div class="btn-group" role="group">
                             {% if current_user.id == event.user_id %}
-                           
-                            <a href="{{ url_for('update_event_page', event_id=event.id) }}" class="btn btn-primary mr-2">Update</a>
-                            <form action="{{ url_for('delete_event', event_id=event.id) }}"  method="POST" onsubmit="return confirm('Are you sure you want to delete this event?');">
-                                <button type="submit" class="btn btn-danger mr-2">Delete</button>
+                            <form>
+                                <a href="{{ url_for('update_event_page', event_id=event.id) }}" class="btn btn-primary mr-2">Update</a>
                             </form>
+                            <form action="{{ url_for('delete_event', event_id=event.id) }}" method="POST">
+                                <button type="button" class="btn btn-danger mr-2" onclick="document.getElementById('deleteDialog').showModal();">Delete</button>
+                                <dialog id="deleteDialog">
+                                    <p>Are you sure you want to delete this event?</p>
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('deleteDialog').close();">Cancel</button>
+                                </dialog>
+                            </form>
+                            <br>
                             <form action="{{ url_for('save_event', event_id=event.id) }}" method="POST">
                                 <button type="submit" class="btn btn-success">Save</button>
                             </form>
                             {% else %}
-                            
+                            <br>
                             <form action="{{ url_for('save_event', event_id=event.id) }}" method="POST">
                                 <button type="submit" class="btn btn-success">Save</button>
                             </form>
