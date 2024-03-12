@@ -57,16 +57,24 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item mr-3">
-                        <button class="btn btn-outline-primary"><a href="{{url_for('dashboard')}}">Home</a></button>
+                        <a href="{{url_for('dashboard')}}">
+                            <button class="btn btn-outline-primary">Home</button>
+                        </a>  
                     </li>
                     <li class="nav-item mr-3">
-                        <button class="btn btn-outline-primary"><a href="{{url_for('post_event')}}">Post an Event</a></button>
+                        <a href="{{url_for('post_event')}}">
+                            <button class="btn btn-outline-primary">Post an Event</button>
+                        </a>
                     </li>
                     <li class="nav-item mr-3">
-                        <button class="btn btn-outline-primary"><a href="{{url_for('logout')}}">Log Out</a></button>
+                        <a href="{{url_for('logout')}}">
+                            <button class="btn btn-outline-primary">Log Out</button>
+                        </a>
                     </li>
                     <li class="nav-item mr-3">
-                        <button class="btn btn-outline-primary"><a href="{{url_for('profile',user_id=current_user.id)}}">Profile</a></button>
+                        <a href="{{url_for('profile',user_id=current_user.id)}}">
+                            <button class="btn btn-outline-primary">Profile</button>
+                        </a>
                     </li>
                 </ul>
             </div>
