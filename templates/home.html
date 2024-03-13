@@ -57,6 +57,8 @@
     .card {
         margin-bottom: 20px;
         transition: transform 0.2s;
+        display: flex;
+        justify-content: space-between;
     }
     .card-img-top {
         object-fit: cover;
@@ -68,6 +70,13 @@
             font-family: Arial, sans-serif; 
             margin: 0;
             padding: 0;
+    }
+    .row{
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
     }
     
     </style>
@@ -102,20 +111,58 @@
         </div>    
     </div>
     <br>
-   
-    <div class="row">
-        {% for event in events %}
-        <div class="col-md-6">
-            <div class="card">
-                <a href="{{ url_for('event_details', event_id=event.id) }}">
-                    <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
-                </a>
-                <div class="card-body">
-                    <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+    <div style="text-align: center;">
+        <h3>Today Event</h3>
+            <div class="row">
+                {% for event in today_events %}
+                <div class="col-md-6">
+                    <div class="card">
+                        <a href="{{ url_for('event_details', event_id=event.id) }}">
+                            <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+    </div>
+    <br>
+    <div style="text-align: center;">
+        <h3 style="color: white">Past Events</h3>
+        <div class="row">
+            {% for event in past_events %}
+            <div class="col-md-6">
+                <div class="card">
+                    <a href="{{ url_for('event_details', event_id=event.id) }}">
+                        <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+    </div>
+    <br>
+    <div style="text-align: center;">
+        <h3 style="color: white;">Upcoming Events</h3>
+        <div class="row">
+            {% for event in upcoming_events %}
+            <div class="col-md-6">
+                <div class="card">
+                    <a href="{{ url_for('event_details', event_id=event.id) }}">
+                        <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %} 
+            </div>
     </div>
     <br>
     <footer style="text-align: center;">@2024 Copyright Evento</footer>
