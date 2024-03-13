@@ -38,6 +38,7 @@
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
                     <li class="nav-item mr-3">
                         <a href="{{url_for('dashboard')}}">
                             <button class="btn btn-outline-primary">Home</button>
@@ -47,12 +48,23 @@
                         <a href="{{url_for('post_event')}}">
                             <button class="btn btn-outline-primary">Post an Event</button>
                         </a>
-                    </li>
                     <li class="nav-item">
-                        <a href="{{url_for('logout')}}">
+                        <a href="{{url_for('login')}}">
                             <button class="btn btn-outline-primary">Logout</button>
                         </a>
                     </li>
+                {% else %}
+                    <li class="nav-item mr-3">
+                        <a href="{{url_for('home')}}">
+                            <button class="btn btn-outline-primary">Home</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{url_for('login')}}">
+                            <button class="btn btn-outline-primary">Login</button>
+                        </a>
+                    </li>
+                {% endif %}
                 </ul>
             </div>
         </div>
