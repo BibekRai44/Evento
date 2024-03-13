@@ -13,7 +13,7 @@ from flask_wtf.file import FileField, FileRequired
 from sqlalchemy import or_
 from sqlalchemy.orm import relationship
 from functools import wraps
-from datetime import timedelta
+from datetime import timedelta,datetime
 
 
 app = Flask(__name__)
@@ -194,7 +194,21 @@ class EventForm(FlaskForm):
 def home():
     app.permanent_session_lifetime = timedelta(seconds=180)
     events=Event.query.all()
-    return render_template('home.html',events=events)
+
+    #for datetime
+
+    all_events = Event.query.all()
+    today=datetime.today().date()
+
+    for event in all_events:
+        event.date = datetime.strptime(event.date, '%Y-%m-%d').date()
+        
+    today_events = [event for event in all_events if event.date == today]
+    past_events = [event for event in all_events if event.date < today]
+    upcoming_events = [event for event in all_events if event.date > today]
+
+    return render_template('home.html',events=events,today_events=today_events,past_events=past_events,upcoming_events=upcoming_events)
+
 
 @app.route('/team')
 def team():
