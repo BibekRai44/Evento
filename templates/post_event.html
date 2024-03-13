@@ -10,8 +10,6 @@
     <meta name="author" content="Evento">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/nepali-datepicker/dist/js/nepali-date-converter.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/nepali-datepicker/dist/js/nepali-datepicker.min.js"></script>
 
     <title>Post Event</title>
     <style>
@@ -94,40 +92,6 @@
             <button type="submit" class="btn btn-outline-primary">Post</button>
         </form>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add event listener to the form
-            document.getElementById('eventForm').addEventListener('submit', function(event) {
-                // Prevent the form from submitting normally
-                event.preventDefault();
-
-                // Get the date input value
-                var dateInput = document.getElementById('eventDate').value;
-
-                // Convert the date to Nepali format using the Nepali Date Converter library
-                var nepaliDate = NepaliFunctions.AD2BS(dateInput);
-
-                // Update the date input value with the Nepali date
-                document.getElementById('eventDate').value = nepaliDate.bs;
-
-                // Submit the form
-                this.submit();
-            });
-
-            // Add event listener to the English date input field to convert to Nepali date on change
-            document.getElementById('eventDate').addEventListener('change', function() {
-                // Get the date input value
-                var dateInput = this.value;
-
-                // Convert the date to Nepali format using the Nepali Date Converter library
-                var nepaliDate = NepaliFunctions.AD2BS(dateInput);
-
-                // Update the date input value with the Nepali date
-                this.value = nepaliDate.bs;
-            });
-        });
-    </script>
-    
     <!-- Bootstrap JS and dependencies (optional, if needed) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

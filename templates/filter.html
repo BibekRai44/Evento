@@ -43,8 +43,10 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
                     <li class="nav-item mr-3">
                         <a href="{{url_for('dashboard')}}">
                             <button class="btn btn-outline-primary">Home</button>
@@ -55,10 +57,23 @@
                             <button class="btn btn-outline-primary">Post an Event</button>
                         </a>
                     <li class="nav-item">
-                        <a href="{{url_for('logout')}}">
+                        <a href="{{url_for('login')}}">
                             <button class="btn btn-outline-primary">Logout</button>
                         </a>
                     </li>
+                {% else %}
+                    <li class="nav-item mr-3">
+                        <a href="{{url_for('home')}}">
+                            <button class="btn btn-outline-primary">Home</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{url_for('login')}}">
+                            <button class="btn btn-outline-primary">Login</button>
+                        </a>
+                    </li>
+                {% endif %}
+
                 </ul>
             </div>
         </div>
