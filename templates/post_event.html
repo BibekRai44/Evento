@@ -10,6 +10,9 @@
     <meta name="author" content="Evento">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/nepali-datepicker/dist/js/nepali-date-converter.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nepali-datepicker/dist/js/nepali-datepicker.min.js"></script>
+
     <title>Post Event</title>
     <style>
         .btn-outline-primary:hover {
@@ -70,7 +73,7 @@
             </div>
             <div class="form-group">
                 <label for="eventDate">Date<span class="text-danger">*</span></label>
-                <input type="date" class="form-control" name="date" id="eventDate" required>
+                <input type="date" class="form-control" name="date" id="eventDate" placeholder="YYYY-MM-DD" required>
             </div>
             <div class="form-group">
                 <label for="eventDuration">Duration<span class="text-danger">*</span></label>
@@ -79,34 +82,6 @@
             <div class="form-group">
                 <label for="eventTime">Time<span class="text-danger">*</span></label>
                 <input type="time" class="form-control" name="time" id="eventTime" required>
-            </div>
-            <div class="form-group">
-                <label for="eventCategory">Category</label>
-                <select class="form-control" id="eventCategory" name="category">
-                    <option value="" disabled selected>Select category</option>
-                    <option value="Seminars">Seminars</option>
-                    <option value="Exhibitions">Exhibitions</option>
-                    <option value="Orientation">Orientation</option>
-                    <option value="Workshops">Workshops</option>
-                    <option value="Conferences">Conferences</option>
-                    <option value="Meetings">Meetings</option>
-                    <option value="Festivals">Festivals</option>
-                    <option value="Concerts">Concerts</option>
-                    <option value="Social">Social</option>
-                    <option value="Sports">Sports</option>
-                    <option value="Fitness and Workouts">Fitness and Workouts</option>
-                    <option value="Food">Food and Drinks</option>
-                    <option value="Religion">Religion</option>
-                    <option value="Arts and Culture">Arts and Culture</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Business">Business</option>
-                    <option value="Science">Science</option>
-
-
-                    <option value="others">Others</option>
-                    
-                </select>
             </div>
             <div class="form-group">
                 <label for="eventImage">Event Image<span class="text-danger">*</span></label>
@@ -119,7 +94,40 @@
             <button type="submit" class="btn btn-outline-primary">Post</button>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listener to the form
+            document.getElementById('eventForm').addEventListener('submit', function(event) {
+                // Prevent the form from submitting normally
+                event.preventDefault();
 
+                // Get the date input value
+                var dateInput = document.getElementById('eventDate').value;
+
+                // Convert the date to Nepali format using the Nepali Date Converter library
+                var nepaliDate = NepaliFunctions.AD2BS(dateInput);
+
+                // Update the date input value with the Nepali date
+                document.getElementById('eventDate').value = nepaliDate.bs;
+
+                // Submit the form
+                this.submit();
+            });
+
+            // Add event listener to the English date input field to convert to Nepali date on change
+            document.getElementById('eventDate').addEventListener('change', function() {
+                // Get the date input value
+                var dateInput = this.value;
+
+                // Convert the date to Nepali format using the Nepali Date Converter library
+                var nepaliDate = NepaliFunctions.AD2BS(dateInput);
+
+                // Update the date input value with the Nepali date
+                this.value = nepaliDate.bs;
+            });
+        });
+    </script>
+    
     <!-- Bootstrap JS and dependencies (optional, if needed) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

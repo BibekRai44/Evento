@@ -30,6 +30,44 @@
             margin: 0;
             padding: 0;
         }
+        .custom-card {
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        margin-bottom: 20px;
+    }
+
+    .custom-card .card-body {
+        padding: 1.25rem;
+    }
+
+    .custom-card .card-img-top {
+        width: 100%;
+        height: 200px; 
+        object-fit: cover;
+        border-top-left-radius: calc(0.25rem - 1px);
+        border-top-right-radius: calc(0.25rem - 1px);
+    }
+
+    .custom-card .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 0.75rem;
+    }
+
+    .custom-card .card-text {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .custom-card .btn {
+        font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .custom-card .card-img-top {
+            height: 150px;
+        }
+    }
     </style>
 </head>
 <body>
@@ -65,15 +103,23 @@
         <h1 style="text-align: center;">Filtered Events</h1>
         <ul class="event-list">
             {% for event in events %}
-            <li class="event-item">
-                <a href="{{ url_for('event_details', event_id=event.id) }}">
-                    <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image" height="40px" width="40px">
-                </a>
-                <br>
-                <a href="{{ url_for('event_details', event_id=event.id) }}">
-                    <strong>{{ event.eventname }}</strong> - {{ event.date }}
-                </a>
-            </li>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="custom-card">
+                            <div class="card-body">
+                                <a href="{{ url_for('event_details', event_id=event.id) }}">
+                                    <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+                                </a>
+                                <h5 class="card-title">{{ event.eventname }}</h5>
+                                <p class="card-text">Date: {{ event.date }}</p>
+                                <a href="{{ url_for('event_details', event_id=event.id) }}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             {% endfor %}
         </ul>
     </div>

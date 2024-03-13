@@ -78,13 +78,11 @@
                 <div class="col-md-4">
                     <div class="card mb-4">
                         <div class="card-body">
+                            <a href="{{ url_for('event_details', event_id=event.id) }}">
+                                <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+                            </a>
                             <h5 class="card-title">{{ event.eventname }}</h5>
-                            <p class="card-text">Duration: {{ event.duration }}</p>
                             <p class="card-text">Date: {{ event.date }}</p>
-                            <p class="card-text">Location: {{ event.location }}</p>
-                            <p class="card-text">Time: {{ event.time }}</p>
-                            <p class="card-text">Organized By: {{ event.organizer }}</p>
-                            <p class="card-text">Contact Organizer: {{ event.contactorganizer }}</p>
                             <a href="{{ url_for('event_details', event_id=event.id) }}" class="btn btn-primary">View Details</a>
                             
                         </div>
