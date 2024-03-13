@@ -109,35 +109,58 @@
                         
         </div>
         <br>
-        <div class="row">
-            {% for event in events %}
-            <div class="col-md-6">
-                <div class="card clickable-card" data-toggle="collapse" data-href="{{ url_for('event_details', event_id=event.id) }}">
-                    <div class="card-body">
-                       <!-- <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>-->
-        
-                        <h5 class="card-title">
+        <div style="text-align: center;">
+            <h3 style="color: white;">Today Event</h3>
+                <div class="row">
+                    {% for event in today_events %}
+                        <div class="col-md-6">
+                            <div class="card">
+                            <a href="{{ url_for('event_details', event_id=event.id) }}">
+                                <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+        </div>
+        <br>
+        <div style="text-align: center;">
+            <h3 style="color: white">Past Events</h3>
+            <div class="row">
+                {% for event in past_events %}
+                <div class="col-md-6">
+                    <div class="card">
                         <a href="{{ url_for('event_details', event_id=event.id) }}">
-                            <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="img-fluid card-img" alt="Event Image">
+                            <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
                         </a>
-                        <br>
-                        <a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a>
-                        </h5>
-                    
-                        <!--<p class="card-text"><strong>Duration:</strong> {{ event.duration }}</p>
-                        <p class="card-text"><strong>Date:</strong> {{ event.date }}</p>
-                        <p class="card-text"><strong>Location:</strong> {{ event.location }}</p>
-                        <p class="card-text"><strong>Time:</strong> {{ event.time }}</p>
-                        <p class="card-text"><strong>Organized By:</strong> {{ event.organizer }}</p>
-                        <p class="card-text"><strong>Contact Organizer:</strong> {{ event.contactorganizer }}</p>
-                        <p class="card-text"><strong>Description:</strong> {{ event.description }}</p>-->
-                        
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+                        </div>
                     </div>
                 </div>
-                
-                           
+                {% endfor %}
             </div>
-            {% endfor %}
+        </div>
+        <br>
+        <div style="text-align: center;">
+            <h3 style="color: white;">Upcoming Events</h3>
+            <div class="row">
+                {% for event in upcoming_events %}
+                <div class="col-md-6">
+                    <div class="card">
+                        <a href="{{ url_for('event_details', event_id=event.id) }}">
+                            <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %} 
+                </div>
         </div>
     </div>
     <!-- Bootstrap JS and dependencies (optional, if needed) -->

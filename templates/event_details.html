@@ -73,6 +73,7 @@
                         </a>
                         
                     </li>
+                    {% if not current_user.is_authenticated %}
                     <li class="nav-item mr-3">
                         <a href="{{url_for('login')}}">
                             <button class="btn btn-outline-primary">Login</button>
@@ -83,6 +84,8 @@
                             <button class="btn btn-outline-primary">Register</button>
                         </a>
                     </li>
+                    {% endif %}
+
                     {% if current_user.is_authenticated %}
                         <li class="nav-item mr-3">
                             <button class="btn btn-outline-primary"><a href="{{url_for('logout')}}">Log Out</a></button>

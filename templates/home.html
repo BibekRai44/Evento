@@ -110,13 +110,13 @@
                     <a href="{{ url_for('filter_events') }}" style="color: white; text-decoration: none;"><button style="margin-left: 25px;" class="btn btn-primary">Filter Events</button>
         </div>    
     </div>
-    <br>
+    <br> 
     <div style="text-align: center;">
         <h3>Today Event</h3>
             <div class="row">
                 {% for event in today_events %}
-                <div class="col-md-6">
-                    <div class="card">
+                    <div class="col-md-6">
+                        <div class="card">
                         <a href="{{ url_for('event_details', event_id=event.id) }}">
                             <img src="{{ url_for('static', filename='uploads/' + event.image_path) }}" class="card-img-top" alt="Event Image">
                         </a>
