@@ -202,7 +202,7 @@ def home():
 
     for event in all_events:
         event.date = datetime.strptime(event.date, '%Y-%m-%d').date()
-        
+
     today_events = [event for event in all_events if event.date == today]
     past_events = [event for event in all_events if event.date < today]
     upcoming_events = [event for event in all_events if event.date > today]
@@ -299,7 +299,20 @@ def remove_saved_event(event_id):
 @login_required
 def dashboard():  
     events = Event.query.all()
-    return render_template('dashboard.html', events=events)
+
+    #for datetime
+
+    all_events = Event.query.all()
+    today=datetime.today().date()
+
+    for event in all_events:
+        event.date = datetime.strptime(event.date, '%Y-%m-%d').date()
+        
+    today_events = [event for event in all_events if event.date == today]
+    past_events = [event for event in all_events if event.date < today]
+    upcoming_events = [event for event in all_events if event.date > today]
+
+    return render_template('dashboard.html', events=events,today_events=today_events,past_events=past_events,upcoming_events=upcoming_events)
 
 
 @app.route('/profile/<int:user_id>',methods=['GET','POST'])
