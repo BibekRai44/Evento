@@ -121,6 +121,7 @@
                             <div class="card-body">
                                 <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
                             </div>
+                            <p>Posted by <span style="color: blue;">{{ event.user.username }}</span></p>
                         </div>
                     </div>
                     {% endfor %}
@@ -139,6 +140,7 @@
                         <div class="card-body">
                             <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
                         </div>
+                        <p>Posted by <span style="color: blue;">{{ event.user.username }}</span></p>
                     </div>
                 </div>
                 {% endfor %}
@@ -157,6 +159,7 @@
                         <div class="card-body">
                             <h5 class="card-title"><a href="{{ url_for('event_details', event_id=event.id) }}">{{ event.eventname }}</a></h5>
                         </div>
+                        <p>Posted by <span style="color: blue;">{{ event.user.username }}</span></p>
                     </div>
                 </div>
                 {% endfor %} 
