@@ -73,7 +73,6 @@ class Event(db.Model):
     time = db.Column(db.String(100), nullable=False)
     organizer = db.Column(db.String(100), nullable=False)
     contactorganizer = db.Column(db.String(100), nullable=False)
-    category = db.Column(db.String(100), nullable=False)
     image_path = db.Column(db.String(255), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
@@ -146,8 +145,6 @@ class EventForm(FlaskForm):
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Contact Organizer"})
     time=StringField(validators=[
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Time"})
-    category = StringField(validators=[
-                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Category"})
     image = FileField(validators=[FileRequired()])
  
 
@@ -190,10 +187,6 @@ class EventForm(FlaskForm):
         existing_description = Event.query.filter_by(
             description=description.data).first()
     
-    def validate_category(self, category):
-        existing_category = Event.query.filter_by(
-            category=category.data).first()
-        
         
     
 
@@ -363,7 +356,6 @@ def update_event_page(event_id):
         event.time = request.form['time']
         event.organizer = request.form['organizer']
         event.contactorganizer = request.form['contactorganizer']
-        event.category = request.form['category']
         event.description = request.form['description']
 
         if 'image' in request.files:
@@ -411,7 +403,7 @@ def post_event():
             time=form.time.data,
             organizer=form.organizer.data,
             contactorganizer=form.contactorganizer.data,
-            category=form.category.data,
+            
             image_path=filename,
             user_id=user_id
                        
