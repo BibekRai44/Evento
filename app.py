@@ -41,7 +41,7 @@ saved_events = db.Table('saved_events',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True)
 )
-user_posted_events = db.Table('user_posted_events',
+posted_events = db.Table('user_posted_events',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('event_id', db.Integer, db.ForeignKey('event.id'), primary_key=True)
 )
@@ -52,7 +52,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     saved_events = db.relationship('Event', secondary=saved_events, backref='saved_by')
-    posted_events = db.relationship('Event', secondary=user_posted_events, backref='posted_by')
+    posted_events = db.relationship('Event', secondary=posted_events, backref='posted_by')
     
 
 
@@ -275,7 +275,7 @@ def save_event(event_id):
 def posted_events():
     
     posted_events = current_user.posted_events
-    return render_template('profile.html', user_posted_events=posted_events)
+    return render_template('profile.html', posted_events=posted_events)
 
 
 
