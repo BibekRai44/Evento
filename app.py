@@ -407,6 +407,7 @@ def forgot_password():
 
 @app.route('/update_password/<token>', methods=['GET', 'POST'])
 def update_password(token):
+    form = UpdatePasswordForm()
     if request.method == 'POST':
         new_password = request.form.get('new-password')
         confirm_password = request.form.get('confirm-password')
