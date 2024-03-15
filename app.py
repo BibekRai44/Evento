@@ -388,6 +388,7 @@ def delete_event(event_id):
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
+    error_message = None
     if request.method == 'POST':
         email = request.form.get('email')
         user = User.query.filter_by(email=email).first()
@@ -396,17 +397,14 @@ def forgot_password():
             token = s.dumps(email, salt='forgot-password')
             reset_link = url_for('update_password', token=token, _external=True)
 
-            # Send email with reset link
             send_reset_email(email, reset_link)
             flash('Password reset email sent. Please check your inbox.', 'info')
             return redirect(url_for('login'))
         else:
-            flash('Email address not found.', 'error')
-            return redirect(url_for('forgot_password'))
+            error_message = 'Email address not found. Please provide a registered email address.'
     
-    return render_template('forgot_password.html')
+    return render_template('forgot_password.html',error_message=error_message)
 
-# Route for updating the password
 @app.route('/update_password/<token>', methods=['GET', 'POST'])
 def update_password(token):
     if request.method == 'POST':
@@ -414,14 +412,6 @@ def update_password(token):
         confirm_password = request.form.get('confirm-password')
 
        
-        s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        try:
-            email = s.loads(token, salt='forgot-password', max_age=1800)  
-        except:
-            flash('Invalid or expired token.', 'error')
-            return redirect(url_for('forgot_password'))
-
-        
         if new_password != confirm_password:
             flash('New password and confirm password do not match.', 'error')
             return redirect(url_for('update_password', token=token))
@@ -430,7 +420,13 @@ def update_password(token):
             flash('New password must be at least 8 characters long.', 'error')
             return redirect(url_for('update_password', token=token))
 
-        
+        s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        try:
+            email = s.loads(token, salt='forgot-password', max_age=1800)  
+        except:
+            flash('Invalid or expired token.', 'error')
+            return redirect(url_for('forgot_password'))
+
         user = User.query.filter_by(email=email).first()
         if user:
             user.password = generate_password_hash(new_password)
@@ -441,7 +437,6 @@ def update_password(token):
             flash('User not found.', 'error')
             return redirect(url_for('forgot_password'))
 
-    
     return render_template('update_password.html', token=token)
 
 
