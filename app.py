@@ -1,11 +1,11 @@
-from flask import Flask, render_template, url_for, redirect,request,flash,abort,session
+from flask import Flask, render_template, url_for, redirect,request,flash,abort,session,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField,validators
 from wtforms.validators import InputRequired, Length, ValidationError,EqualTo,Regexp,Email,DataRequired
 from flask_bcrypt import Bcrypt,generate_password_hash,check_password_hash
-from sqlalchemy import inspect
+from sqlalchemy import inspect,ForeignKey
 import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
@@ -20,10 +20,6 @@ from flask_mail import Mail
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from itsdangerous import URLSafeTimedSerializer
-
-
-
-
 
 app = Flask(__name__)
 
@@ -71,9 +67,12 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), nullable=False, unique=True)
     saved_events = db.relationship('Event', secondary=saved_events, backref='saved_by')
     posted_events = db.relationship('Event', secondary=posted_events, backref='posted_by')
-    
 
-
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender = db.Column(db.String(100))
+    recipient = db.Column(db.String(100))
+    body = db.Column(db.String(1000))
 
 class SavedEvent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -212,8 +211,9 @@ class EventForm(FlaskForm):
     
 
 @app.route('/')
+
 def home():
-    app.permanent_session_lifetime = timedelta(seconds=180)
+    app.permanent_session_lifetime = timedelta(seconds=600)
     events=Event.query.all()
 
     #for datetime
@@ -247,8 +247,6 @@ def postevent():
 @app.route('/service')
 def service():
     return render_template('service.html')
-
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
