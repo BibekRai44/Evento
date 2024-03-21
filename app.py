@@ -14,7 +14,6 @@ from sqlalchemy import or_
 from sqlalchemy.orm import relationship
 from functools import wraps
 from datetime import timedelta,datetime
-from flask_mail import Message
 import secrets
 from flask_mail import Mail
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
@@ -67,12 +66,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), nullable=False, unique=True)
     saved_events = db.relationship('Event', secondary=saved_events, backref='saved_by')
     posted_events = db.relationship('Event', secondary=posted_events, backref='posted_by')
-
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    sender = db.Column(db.String(100))
-    recipient = db.Column(db.String(100))
-    body = db.Column(db.String(1000))
 
 class SavedEvent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
