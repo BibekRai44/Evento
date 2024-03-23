@@ -66,7 +66,7 @@
             </div>
             <div class="form-group">
                 <label for="eventContactOrganizer">Contact Organizer<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="contactorganizer" id="eventContactOrganizer" required>
+                <input type="text" class="form-control" name="contactorganizer" id="eventContactOrganizer" required >
                 <small id="emailHelp" class="form-text text-muted">Enter plain text or a link</small>
             </div>
             <div class="form-group">
@@ -100,7 +100,29 @@
     <script>
         document.getElementById('eventDate').min = new Date().toISOString().split("T")[0];
     </script>
-
+    <script>
+        document.getElementById('eventContactOrganizer').addEventListener('input', function() {
+            var input = this.value.trim();
+            if (/^\d{10}$/.test(input)) {
+                this.maxLength = 10;
+                this.setCustomValidity('');
+            } else {
+                this.maxLength = 100;
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+    document.getElementById('eventContactOrganizer').addEventListener('input', function() {
+        var input = this.value.trim();
+        if (/^\d{10}$/.test(input)) {
+            this.maxLength = 10;
+            this.setCustomValidity('');
+        } else {
+            this.maxLength = 100;
+            this.setCustomValidity('');
+        }
+    });
+    
     <br>
     <footer style="text-align: center;">@2024 Copyright Evento</footer>
 </body>
