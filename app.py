@@ -19,6 +19,7 @@ from flask_mail import Mail
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from itsdangerous import URLSafeTimedSerializer
+from fuzzywuzzy import process,fuzz
 
 app = Flask(__name__)
 
@@ -86,6 +87,22 @@ class Event(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     user = db.relationship('User',backref=db.backref('events', lazy=True))
+
+    @staticmethod
+    def get_similar_events(event_title, limit=3):
+        
+        all_events = Event.query.filter(Event.eventname != event_title).all()
+
+        
+        event_titles = [e.eventname for e in all_events]
+
+        # Use FuzzyWuzzy to find similar event titles
+        title_matches = process.extract(event_title, event_titles, limit=limit)
+
+        # Retrieve similar events based on matched titles
+        similar_events = [event for (title, score) in title_matches for event in all_events if event.eventname == title]
+
+        return similar_events
 
 
 db.create_all()
@@ -336,10 +353,13 @@ def profile(user_id):
     saved_events = user.saved_events
     return render_template('profile.html', user=user, saved_events=saved_events,posted_events=posted_events)
 
+
 @app.route('/event_details/<int:event_id>')
 def event_details(event_id):
     event = Event.query.get_or_404(event_id)
     saved_message = None
+
+    similar_events = Event.get_similar_events(event.eventname)
 
     if current_user.is_authenticated:
         if request.method == 'POST':
@@ -350,7 +370,7 @@ def event_details(event_id):
                 db.session.commit()
                 saved_message = 'Event saved successfully!'
 
-    return render_template('event_details.html', event=event, saved_message=saved_message)
+    return render_template('event_details.html', event=event, saved_message=saved_message,similar_events=similar_events)
 
 @app.route('/filter', methods=['GET', 'POST'])
 def filter_events():
