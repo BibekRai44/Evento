@@ -20,6 +20,7 @@ from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from itsdangerous import URLSafeTimedSerializer
 from fuzzywuzzy import process,fuzz
+from sqlalchemy import and_
 
 app = Flask(__name__)
 
@@ -93,13 +94,10 @@ class Event(db.Model):
         
         all_events = Event.query.filter(Event.eventname != event_title).all()
 
-        
         event_titles = [e.eventname for e in all_events]
 
-        # Use FuzzyWuzzy to find similar event titles
         title_matches = process.extract(event_title, event_titles, limit=limit)
 
-        # Retrieve similar events based on matched titles
         similar_events = [event for (title, score) in title_matches for event in all_events if event.eventname == title]
 
         return similar_events
@@ -513,6 +511,23 @@ def post_event():
         image_file.save(image_path)
         user_id = current_user.id
         print("Form data:", request.form)
+        existing_event = Event.query.filter(and_(
+            Event.eventname == form.eventname.data,
+            Event.duration == form.duration.data,
+            Event.date == form.date.data,
+            Event.location == form.location.data,
+            Event.description == form.description.data,
+            Event.time == form.time.data,
+            Event.organizer == form.organizer.data,
+            Event.contactorganizer == form.contactorganizer.data,
+            
+        )).first()
+
+        if existing_event:
+            flash('The same event has already been posted!', 'danger')
+            return redirect(url_for('dashboard'))
+        
+        
         event = Event(
             eventname=form.eventname.data,
             duration=form.duration.data,
