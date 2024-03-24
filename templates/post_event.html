@@ -112,16 +112,6 @@
             }
         });
     </script>
-    document.getElementById('eventContactOrganizer').addEventListener('input', function() {
-        var input = this.value.trim();
-        if (/^\d{10}$/.test(input)) {
-            this.maxLength = 10;
-            this.setCustomValidity('');
-        } else {
-            this.maxLength = 100;
-            this.setCustomValidity('');
-        }
-    });
     
     <br>
     <footer style="text-align: center;">@2024 Copyright Evento</footer>
