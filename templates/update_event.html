@@ -25,10 +25,8 @@
                                 <label for="eventName">Event Name<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="eventname" id="eventName" value="{{ event.eventname }}"  required>
                             </div>
-                            <div class="form-group"> 
+                            <div class="autocomplete-container" id="autocomplete-container">
                                 <label for="eventLocation">Location<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="location" id="eventLocation" value="{{event.location}}" required>
-                                <small id="emailHelp" class="form-text text-muted">Enter plain text or a link</small>
                             </div>
                             <div class="form-group">
                                 <label for="eventOrganizer">Organized By<span class="text-danger">*</span></label>
@@ -71,7 +69,7 @@
         </div>
     </div>
     <br>
-    <footer style="text-align: center;">@2024 Copyright Evento</footer>
+    <footer style="text-align: center;">@2024 Copyright Evento</footer>   
 </body>
 
 </html>

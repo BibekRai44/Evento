@@ -122,12 +122,9 @@
                 <label for="eventName">Event Name<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="eventname" id="eventName" placeholder="Enter event name" required>
             </div>
-            <div class="form-group"> 
-                <label for="eventLocation">Location<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="location" id="eventLocation" placeholder="Enter event location" required>
-                <small id="emailHelp" class="form-text text-muted">Enter plain text or a link</small>
+            <div class="autocomplete-container" id="autocomplete-container">
+              <label for="eventLocation">Location<span class="text-danger">*</span></label>
             </div>
-            <div class="autocomplete-container" id="autocomplete-container"></div>
             <div class="form-group">
                 <label for="eventOrganizer">Organized By<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="organizer" id="eventOrganizer" required>

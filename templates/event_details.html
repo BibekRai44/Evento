@@ -10,10 +10,19 @@
     <meta name="author" content="Evento">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <title>Event Details</title>
 </head>
 
 <body>
+    <div id="map" style="height: 400px;"></div>
+
+    <!-- Bootstrap JS and dependencies (optional, if needed) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
         body {
             background: linear-gradient(to bottom right, #ff6b6b, #3b5998);
@@ -174,6 +183,22 @@
             </div>
         </div>
     </div>
+    <br>
+    <script>
+        var map = L.map('my-map').setView([{{ event.latitude }}, {{ event.longitude }}], 20);
+        var myAPIKey = "823a017cb8cc407fb759b948450fc4fe";
+        var isRetina = L.Browser.retina;
+    
+        var baseUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey={apiKey}";
+        var retinaUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey={apiKey}";
+    
+        L.tileLayer(isRetina ? retinaUrl : baseUrl, {
+            attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" rel="nofollow" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" rel="nofollow" target="_blank">© OpenStreetMap</a> contributors',
+            apiKey: myAPIKey,
+            maxZoom: 20,
+            id: 'osm-bright',
+        }).addTo(map);
+    </script>
     <br>
     <h1 style="text-align: left; margin-left: 90px; color: white;">Similar Events</h1>
     <br>
