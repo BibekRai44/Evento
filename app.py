@@ -21,6 +21,7 @@ from itsdangerous import URLSafeTimedSerializer as Serializer
 from itsdangerous import URLSafeTimedSerializer
 from fuzzywuzzy import process,fuzz
 from sqlalchemy import and_
+from wtforms.validators import Regexp
 
 app = Flask(__name__)
 
@@ -158,13 +159,11 @@ class EventForm(FlaskForm):
 
     duration = StringField(validators=[
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Duration"})
+    location = StringField(validators=[
+                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Location","id": "autocomplete-location"})
 
     date = StringField(validators=[
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Date"})
-
-    location = StringField(validators=[
-                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Location"})
-
     description = StringField(validators=[
                            InputRequired(), Length(min=4, max=1024)], render_kw={"placeholder": "Description"})
     organizer = StringField(validators=[
@@ -468,8 +467,8 @@ def update_event_page(event_id):
         
         event.eventname = request.form['eventname']
         event.duration = request.form['duration']
-        event.date = request.form['date']
         event.location = request.form['location']
+        event.date = request.form['date']
         event.time = request.form['time']
         event.organizer = request.form['organizer']
         event.contactorganizer = request.form['contactorganizer']
@@ -510,12 +509,16 @@ def post_event():
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         image_file.save(image_path)
         user_id = current_user.id
+
+        # Retrieve location from request data
+        location = request.form.get('location')
+
         print("Form data:", request.form)
         existing_event = Event.query.filter(and_(
             Event.eventname == form.eventname.data,
             Event.duration == form.duration.data,
             Event.date == form.date.data,
-            Event.location == form.location.data,
+            Event.location == location,
             Event.description == form.description.data,
             Event.time == form.time.data,
             Event.organizer == form.organizer.data,
@@ -532,14 +535,14 @@ def post_event():
             eventname=form.eventname.data,
             duration=form.duration.data,
             date=form.date.data,
-            location=form.location.data,
+            location=location,
             description=form.description.data,
             time=form.time.data,
             organizer=form.organizer.data,
             contactorganizer=form.contactorganizer.data,
             
             image_path=filename,
-            user_id=user_id
+            user_id=user_id,
                        
         )
         
