@@ -160,8 +160,7 @@ class EventForm(FlaskForm):
     duration = StringField(validators=[
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Duration"})
     location = StringField(validators=[
-                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Location","id": "autocomplete-location"})
-
+                           InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Location"})
     date = StringField(validators=[
                            InputRequired(), Length(min=4, max=100)], render_kw={"placeholder": "Date"})
     description = StringField(validators=[
@@ -510,8 +509,7 @@ def post_event():
         image_file.save(image_path)
         user_id = current_user.id
 
-        # Retrieve location from request data
-        location = request.form.get('location')
+        location = form.location.data
 
         print("Form data:", request.form)
         existing_event = Event.query.filter(and_(
@@ -535,7 +533,7 @@ def post_event():
             eventname=form.eventname.data,
             duration=form.duration.data,
             date=form.date.data,
-            location=location,
+            location=form.location.data,
             description=form.description.data,
             time=form.time.data,
             organizer=form.organizer.data,
