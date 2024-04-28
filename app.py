@@ -26,7 +26,7 @@ from wtforms.validators import Regexp
 app = Flask(__name__)
 
 bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
